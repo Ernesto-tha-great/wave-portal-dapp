@@ -1,6 +1,6 @@
 .mainContainer { 
   display: flex;
-  flex-direction: column;
+  flex: 1;
   align-items: center;
   justify-content: center;
   height: 100vh;
@@ -10,7 +10,7 @@
 
 .dataContainer {
   text-align: center;
-  height: 40vmin;
+ 
  
 }
 
@@ -18,12 +18,14 @@
   font-size: xxx-large;
   color: white;
   margin-bottom: 20px;
+  margin-top: -33px;
 }
 
 .bio {
   font-size: larger;
   color: white;
   margin-bottom: 15px;
+  margin-top: 20px;
 }
 
 .waveButton {

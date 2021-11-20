@@ -22,23 +22,55 @@ function App() {
 
           // we only need address, timestamp and message in the ui
 
-          let wavesRefactored = [];
-          waves.forEach(wave => {
-            wavesRefactored.push({
+          const wavesCleaned = waves.map(wave => {
+            return {
               address: wave.waver,
               timestamp: new Date(wave.timestamp * 1000),
-              message: wave.message
-            })
-          })
-
-          setAllWaves(wavesRefactored);
+              message: wave.message,
+            };
+          });
+    
+          setAllWaves(wavesCleaned);
         }else {
           console.log("connect metamask wallet")
         }
       } catch(error){
           console.log(error)
       }
+
+// 
   }
+  // * Listen in for emitter events!
+      // */
+     useEffect(() => {
+       let wavePortalContract;
+     
+       const onNewWave = (from, timestamp, message) => {
+         console.log('NewWave', from, timestamp, message);
+         setAllWaves(prevState => [
+           ...prevState,
+           {
+             address: from,
+             timestamp: new Date(timestamp * 1000),
+             message: message,
+           },
+         ]);
+       };
+     
+       if (window.ethereum) {
+         const provider = new ethers.providers.Web3Provider(window.ethereum);
+         const signer = provider.getSigner();
+     
+         wavePortalContract = new ethers.Contract(contractAddress, contractABI, signer);
+         wavePortalContract.on('NewWave', onNewWave);
+       }
+     
+       return () => {
+         if (wavePortalContract) {
+           wavePortalContract.off('NewWave', onNewWave);
+         }
+       };
+     }, []);
 
   const checkIfWalletIsConnected = async () => {
     
@@ -128,7 +160,9 @@ function App() {
 
   return (
   <div className="mainContainer">
-      <div className="dataContainer">
+
+
+       <div className="dataContainer">
         <div className="header">
         👋 Hey there!!
         </div>
@@ -158,7 +192,7 @@ function App() {
             </div>
           ))
         }
-      </div>
+     </div>
     </div>
   );
 }

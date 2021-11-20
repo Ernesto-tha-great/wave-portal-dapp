@@ -1,15 +1,19 @@
 const main = async () => {
     const [owner, johnDoe] = await hre.ethers.getSigners();
     const waveContractFactory = await hre.ethers.getContractFactory('WavePortal');
-    const waveContract = await waveContractFactory.deploy();
+    const waveContract = await waveContractFactory.deploy({
+      value: hre.ethers.utils.parseEther('0.1'),
+    });
     await waveContract.deployed();
   
     console.log("Contract deployed to:", waveContract.address);
     console.log("Contract deployed by:", owner.address);
+
+    // get contract balance
+    let contractBalance = await hre.ethers.provider.getBalance(waveContract.address);
+    console.log("contract Balance", hre.ethers.utils.formatEther(contractBalance));
   
-    let waveCount;
-    waveCount = await waveContract.getTotalWaves();
-    console.log("Total Waves:", waveCount.toNumber());
+
     
     // lets send waves
     let waveTxn = await waveContract.wave("This is my wave mudafucker");
@@ -18,6 +22,13 @@ const main = async () => {
     waveTxn = await waveContract.connect(johnDoe).wave("waving again from john doe");
     await waveTxn.wait(); // wait for txn to be mined
 
+   
+
+    // get contract balance to see what happend
+    contractBalance = await hre.ethers.provider.getBalance(waveContract.address);
+    console.log("contract Balance", hre.ethers.utils.formatEther(contractBalance));
+
+    //allwaves
     waveCount = await waveContract.getAllWaves();
     console.log("Total Waves:", waveCount);
   };
