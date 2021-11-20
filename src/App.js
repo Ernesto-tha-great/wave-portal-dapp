@@ -181,17 +181,18 @@ function App() {
             Connect Wallet
           </button>
         )}
-
+        <div className=" grid grid-cols-4 mx-4  my-2">
         {
-          allWaves.map((wave, index )=> (
-            <div key={index} style={{ backgroundColor: "oldLace", marginTop: "16px", padding: "8px" }}>
-            <div> Address: {wave.address} </div>
-            <div>Time stamp : {wave.timestamp.toString()} </div>
-            <div> Message: {wave.message}  </div>
+          allWaves.map((wave, index )=> ( 
+            <div key={index} className="bg-yellow-700 mt-10 px-10 mx-3">
+            <h2> Address: {wave.address} </h2>
+            <h3>Time stamp : {wave.timestamp.toString()} </h3>
+            <h2> Message: {wave.message}  </h2>
 
             </div>
           ))
         }
+        </div>
      </div>
     </div>
   );
